@@ -88,7 +88,6 @@ func StringSum(input string) (output string, err error) {
 		return strconv.Itoa(op1 - op2), nil
 	} else if operator == "+" {
 		return strconv.Itoa(op1 + op2), nil
-	} else {
-		return "", nil
 	}
+	return "", nil
 }
