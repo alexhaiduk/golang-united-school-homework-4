@@ -26,21 +26,69 @@ var (
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
 func StringSum(input string) (output string, err error) {
-	input = strings.TrimSpace(input)
-	var operands [3]string = (" "," "," ")
-	var operand1 int
-	var operand2 int
-	if len(input) < 3 {
-		digit1, err := strconv.Atoi(input)
-		fmt.Errorf("%w", err, errorEmptyInput)
-		return "", err
-	}
-	for i := 0; i < len(input); i++ {
-		operands[i] = input[i]
-		//digit1, err = strconv.Atoi(input[i])
+	input = strings.ReplaceAll(input, " ", "")
+	var operand1 string = ""
+	var operand2 string = ""
+	var operand3 string = ""
+	var operator string = ""
+	var op1, op2 int
+	var temp string = ""
+	var minus bool = false
+	var found bool = false
+	if len(input) < 1 {
+		//fmt.Errorf("%w", errorEmptyInput)
+		return "", errorEmptyInput
+	} else {
+		for i, v := range input {
+			if i == 0 && strings.Contains(string(v), "-") {
+				minus = true
+			} else {
+				temp += string(v)
+			}
+			if i > 0 && strings.ContainsAny(string(v), "-+") && operator == "" {
+				operator = string(v)
+			}
+		}
+		if operator == "" {
+			//fmt.Errorf("%w", errorNotTwoOperands)
+			return "", errorNotTwoOperands
+		} else {
+			operand1, operand2, found = strings.Cut(temp, operator)
+			if found && strings.ContainsAny(operand2, "-+") {
+				operand3, _, found = strings.Cut(operand2, "-")
+				if found && operand3 != "" {
+					//fmt.Errorf("%w", errorNotTwoOperands)
+					return "", errorNotTwoOperands
+				}
+				operand3, _, found := strings.Cut(operand2, "+")
+				if found && operand3 != "" {
+					//fmt.Errorf("%w", errorNotTwoOperands)
+					return "", errorNotTwoOperands
+				}
+			}
+		}
+		if minus {
+			operand1 = "-" + operand1
+		}
+		op1, err = strconv.Atoi(operand1)
+		fmt.Println(op1)
 		if err != nil {
-			fmt.Errorf("%w", err, errorEmptyInput)
+			//fmt.Errorf("%w", err)
+			return "", err
+		}
+		fmt.Println(operator)
+		op2, err = strconv.Atoi(operand2)
+		fmt.Println(op2)
+		if err != nil {
+			//fmt.Errorf("%w", err)
+			return "", err
 		}
 	}
-	return "", nil
+	if operator == "-" {
+		return strconv.Itoa(op1 - op2), nil
+	} else if operator == "+" {
+		return strconv.Itoa(op1 + op2), nil
+	} else {
+		return "", nil
+	}
 }
