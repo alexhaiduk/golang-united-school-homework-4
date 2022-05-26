@@ -2,7 +2,6 @@ package string_sum
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -29,56 +28,35 @@ func StringSum(input string) (output string, err error) {
 	input = strings.ReplaceAll(input, " ", "")
 	var operand1 string = ""
 	var operand2 string = ""
-	var operand3 string = ""
 	var operator string = ""
 	var op1, op2 int
 	var temp string = ""
-	var minus bool = false
-	var found bool = false
 	if len(input) < 1 {
 		//fmt.Errorf("%w", errorEmptyInput)
 		return "", errorEmptyInput
 	} else {
 		for i, v := range input {
-			if i == 0 && strings.Contains(string(v), "-") {
-				minus = true
+			if i > 0 && strings.ContainsAny(string(v), "-+") && operator == "" {
+				operator = string(v)
+				operand1 = temp
+				temp = ""
 			} else {
 				temp += string(v)
 			}
-			if i > 0 && strings.ContainsAny(string(v), "-+") && operator == "" {
-				operator = string(v)
+			if i == len(input)-1 && operator != "" {
+				operand2 = temp
 			}
 		}
 		if operator == "" {
 			//fmt.Errorf("%w", errorNotTwoOperands)
 			return "", errorNotTwoOperands
-		} else {
-			operand1, operand2, found = strings.Cut(temp, operator)
-			if found && strings.ContainsAny(operand2, "-+") {
-				operand3, _, found = strings.Cut(operand2, "-")
-				if found && operand3 != "" {
-					//fmt.Errorf("%w", errorNotTwoOperands)
-					return "", errorNotTwoOperands
-				}
-				operand3, _, found := strings.Cut(operand2, "+")
-				if found && operand3 != "" {
-					//fmt.Errorf("%w", errorNotTwoOperands)
-					return "", errorNotTwoOperands
-				}
-			}
-		}
-		if minus {
-			operand1 = "-" + operand1
 		}
 		op1, err = strconv.Atoi(operand1)
-		fmt.Println(op1)
 		if err != nil {
 			//fmt.Errorf("%w", err)
 			return "", err
 		}
-		fmt.Println(operator)
 		op2, err = strconv.Atoi(operand2)
-		fmt.Println(op2)
 		if err != nil {
 			//fmt.Errorf("%w", err)
 			return "", err
