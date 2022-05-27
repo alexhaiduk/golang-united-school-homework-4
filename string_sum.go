@@ -31,7 +31,9 @@ func StringSum(input string) (output string, err error) {
 	var operator string = ""
 	var op1, op2 int
 	var temp string = ""
+	//var err error
 	if len(input) < 1 {
+		//fmt.Println(errorEmptyInput)
 		//fmt.Errorf("%w", errorEmptyInput)
 		return "", errorEmptyInput
 	} else {
@@ -48,24 +50,37 @@ func StringSum(input string) (output string, err error) {
 			}
 		}
 		if operator == "" {
+			//fmt.Println(errorNotTwoOperands)
 			//fmt.Errorf("%w", errorNotTwoOperands)
 			return "", errorNotTwoOperands
+		} else {
+			op1, err = strconv.Atoi(operand1)
+			if err != nil {
+				//fmt.Println(err)
+				//fmt.Errorf("%w", err)
+				return "", err
+			}
+			for i, v := range operand2 {
+				if i > 0 && strings.ContainsAny(string(v), "-+") {
+					//fmt.Println(errorNotTwoOperands)
+					//fmt.Errorf("%w", errorNotTwoOperands)
+					return "", errorNotTwoOperands
+				}
+			}
+			op2, err = strconv.Atoi(operand2)
+			if err != nil {
+				//fmt.Println(err)
+				//fmt.Errorf("%w", err)
+				return "", err
+			}
 		}
-		op1, err = strconv.Atoi(operand1)
-		if err != nil {
-			//fmt.Errorf("%w", err)
-			return "", err
+		if operator == "-" {
+			//fmt.Println(strconv.Itoa(op1 - op2))
+			return strconv.Itoa(op1 - op2), nil
+		} else if operator == "+" {
+			//fmt.Println(strconv.Itoa(op1 + op2))
+			return strconv.Itoa(op1 + op2), nil
 		}
-		op2, err = strconv.Atoi(operand2)
-		if err != nil {
-			//fmt.Errorf("%w", err)
-			return "", err
-		}
+		return "", nil
 	}
-	if operator == "-" {
-		return strconv.Itoa(op1 - op2), nil
-	} else if operator == "+" {
-		return strconv.Itoa(op1 + op2), nil
-	}
-	return "", nil
 }
