@@ -2,6 +2,7 @@ package string_sum
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -35,7 +36,8 @@ func StringSum(input string) (output string, err error) {
 	if len(input) < 1 {
 		//fmt.Println(errorEmptyInput)
 		//fmt.Errorf("%w", errorEmptyInput)
-		return "", errorEmptyInput
+		//return "", errorEmptyInput
+		return "", fmt.Errorf("%w", errorEmptyInput)
 	} else {
 		for i, v := range input {
 			if i > 0 && strings.ContainsAny(string(v), "-+") && operator == "" {
@@ -52,26 +54,30 @@ func StringSum(input string) (output string, err error) {
 		if operator == "" {
 			//fmt.Println(errorNotTwoOperands)
 			//fmt.Errorf("%w", errorNotTwoOperands)
-			return "", errorNotTwoOperands
+			//return "", errorNotTwoOperands
+			return "", fmt.Errorf("%w", errorNotTwoOperands)
 		} else {
 			op1, err = strconv.Atoi(operand1)
 			if err != nil {
 				//fmt.Println(err)
 				//fmt.Errorf("%w", err)
-				return "", err
+				//return "", err
+				return "", fmt.Errorf("%w", err)
 			}
 			for i, v := range operand2 {
 				if i > 0 && strings.ContainsAny(string(v), "-+") {
 					//fmt.Println(errorNotTwoOperands)
 					//fmt.Errorf("%w", errorNotTwoOperands)
-					return "", errorNotTwoOperands
+					//return "", errorNotTwoOperands
+					return "", fmt.Errorf("%w", errorNotTwoOperands)
 				}
 			}
 			op2, err = strconv.Atoi(operand2)
 			if err != nil {
 				//fmt.Println(err)
 				//fmt.Errorf("%w", err)
-				return "", err
+				//return "", err
+				return "", fmt.Errorf("%w", err)
 			}
 		}
 		if operator == "-" {
